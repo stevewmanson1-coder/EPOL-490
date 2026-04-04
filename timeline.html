@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Critical History of Artificial Intelligence — EPOL 490</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+:root {
+  --bg:#080808;--surface:#101010;--surface2:#161616;--border:#242424;
+  --text:#e8e4dc;--text-dim:#a09890;--text-muted:#706b64;
+  --red:#9b2335;--red-bright:#c0392b;--amber:#b8860b;--amber-bright:#d4a017;
+  --green:#1e5c3a;--green-bright:#27ae60;--blue:#1a3a5c;--blue-bright:#2980b9;
+  --purple:#3a1e5c;--purple-bright:#8e44ad;
+  --eco:#27ae60;--capital:#c0392b;--science:#2980b9;--coind:#d4a017;--govmil:#6c3483;
+  --l1:#8e44ad;--l2:#e67e22;--l3:#27ae60;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden;}
+.header{position:sticky;top:0;z-index:200;background:rgba(8,8,8,0.96);border-bottom:1px solid var(--border);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(8px);}
+.header-title{font-family:'Playfair Display',serif;font-size:.8rem;letter-spacing:.12em;color:var(--text-dim);}
+.header-tag{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);}
+.hero{padding:5rem 2rem 4rem;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border);}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--red-bright);margin-bottom:1.5rem;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:.5rem;}
+.hero h1 span{color:var(--text-dim);font-style:italic;}
+.hero-sub{font-size:.95rem;color:var(--text-dim);max-width:580px;margin:1.5rem 0 2rem;line-height:1.75;}
+.thesis-block{border-left:2px solid var(--red-bright);padding:1rem 1.5rem;background:var(--surface);font-size:.85rem;color:var(--text-dim);font-style:italic;line-height:1.75;max-width:680px;}
+.legend-section{padding:2rem;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border);}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;}
+.legend-grid{display:flex;flex-wrap:wrap;gap:1.25rem;}
+.legend-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--text-dim);}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.layers-section{padding:2rem;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border);}
+.layer-tabs{display:flex;border:1px solid var(--border);overflow:hidden;}
+.ltab{flex:1;padding:.7rem 1rem;background:var(--surface);border:none;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.05em;cursor:pointer;border-right:1px solid var(--border);transition:all .2s;text-align:left;line-height:1.4;}
+.ltab:last-child{border-right:none;}
+.ltab:hover{background:var(--surface2);color:var(--text);}
+.ltab.active.l1{background:#2a0e3a;color:#c39bd3;border-color:var(--purple-bright);}
+.ltab.active.l2{background:#3a1a0a;color:#e59866;border-color:var(--l2);}
+.ltab.active.l3{background:#0a2a18;color:#82e0aa;border-color:var(--l3);}
+.ltab.active.l4{background:#0a1a2a;color:#85c1e9;border-color:#2471a3;}
+.lpanel{display:none;border:1px solid var(--border);border-top:none;background:var(--surface);}
+.lpanel.active{display:block;}
+.lera{padding:1rem 1.5rem;border-bottom:1px solid var(--border);}
+.lera:last-child{border-bottom:none;}
+.lera-head{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.4rem;}
+.lera-date{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-muted);}
+.lera-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--text);}
+.lera-body{font-size:.78rem;color:var(--text-dim);line-height:1.65;}
+.phase-marker{max-width:860px;margin:0 auto;padding:1.5rem 2rem;display:flex;align-items:center;gap:1rem;}
+.pline{flex:1;height:1px;background:var(--border);}
+.plabel{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
+.timeline{max-width:860px;margin:0 auto;padding:0 2rem 4rem;position:relative;}
+.timeline::before{content:'';position:absolute;left:calc(2rem + 4.5rem);top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 5%,var(--border) 95%,transparent);}
+.node{position:relative;margin-bottom:.1rem;}
+.node-trigger{display:flex;align-items:flex-start;padding:.85rem 0;cursor:pointer;transition:background .15s;border-radius:2px;}
+.node-trigger:hover{background:rgba(255,255,255,.025);}
+.node-trigger.open{background:rgba(255,255,255,.03);}
+.node-date{width:4.5rem;flex-shrink:0;text-align:right;padding-right:1.25rem;font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--text-muted);line-height:1.4;padding-top:.1rem;}
+.node-dot{width:1.5rem;flex-shrink:0;display:flex;justify-content:center;padding-top:.35rem;}
+.dot{width:7px;height:7px;border-radius:50%;border:1px solid var(--border);background:var(--bg);transition:all .2s;flex-shrink:0;}
+.node-trigger:hover .dot,.node-trigger.open .dot{border-color:currentColor;transform:scale(1.3);}
+.node-content{flex:1;padding-left:1rem;}
+.node-tags{display:flex;gap:.4rem;margin-bottom:.35rem;flex-wrap:wrap;}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:.52rem;letter-spacing:.1em;padding:.1rem .4rem;border-radius:2px;border:1px solid;text-transform:uppercase;}
+.tag-eco{color:var(--eco);border-color:var(--green);background:rgba(39,174,96,.08);}
+.tag-capital{color:var(--capital);border-color:var(--red);background:rgba(192,57,43,.08);}
+.tag-science{color:var(--science);border-color:var(--blue);background:rgba(41,128,185,.08);}
+.tag-coind{color:var(--coind);border-color:var(--amber);background:rgba(212,160,23,.08);}
+.tag-govmil{color:#a569bd;border-color:#6c3483;background:rgba(108,52,131,.08);}
+.node-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:.2rem;}
+.node-summary{font-size:.78rem;color:var(--text-dim);line-height:1.6;}
+.node-chevron{flex-shrink:0;width:1.5rem;padding-top:.3rem;color:var(--text-muted);font-size:.6rem;transition:transform .2s;text-align:center;}
+.node-trigger.open .node-chevron{transform:rotate(180deg);}
+.node-panel{display:none;margin-left:7rem;border-left:1px solid var(--border);padding:1.25rem 1.5rem;background:var(--surface);margin-bottom:.5rem;}
+.node-panel.open{display:block;}
+.panel-desc{font-size:.83rem;color:var(--text-dim);line-height:1.75;margin-bottom:1rem;}
+.panel-citation{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--text-muted);border-top:1px solid var(--border);padding-top:.75rem;line-height:1.6;}
+.panel-citation span{color:var(--text-dim);font-style:italic;}
+.references-section{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem;border-top:1px solid var(--border);}
+.ref-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
+.ref-note{font-size:.75rem;color:var(--text-muted);margin-bottom:2rem;font-style:italic;}
+.ref-entry{font-size:.77rem;color:var(--text-dim);line-height:1.7;padding:.6rem 0 .6rem 2rem;text-indent:-2rem;border-bottom:1px solid var(--border);}
+.footer{text-align:center;padding:2rem;font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-muted);letter-spacing:.15em;border-top:1px solid var(--border);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+::selection{background:var(--red);color:white;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title">A Critical History of Artificial Intelligence</div>
+  <div style="display:flex;gap:1.5rem;">
+    <span class="header-tag">EPOL 490 · Spring 2026</span>
+    <span class="header-tag">Course Intervention Artifact</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">EPOL 490 · Spring 2026</div>
+  <h1>A Critical History of<br><span>Artificial Intelligence</span></h1>
+  <p class="hero-sub">From the Cretaceous-Paleogene extinction to the White House robot demonstration of 2026 — a history of artificial intelligence situated within the histories of science, capital, ecology, and the democratic governance of technology.</p>
+  <blockquote class="thesis-block">This timeline traces the history of artificial intelligence — cutting through the hype to examine what the technology actually is, where it came from, and what is at stake. It draws on political economy, philosophy of technology, and education scholarship.</blockquote>
+</section>
+
+<section class="legend-section">
+  <div class="section-label">Thread Legend</div>
+  <div class="legend-grid">
+    
+    <div class="legend-item"><div class="ldot" style="background:var(--capital)"></div>Capital &amp; Labor</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--eco)"></div>Ecocide</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--coind)"></div>Co-Individuation</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--govmil)"></div>Power &amp; Control</div>
+  </div>
+</section>
+
+<section class="layers-section">
+  <div class="section-label">Theoretical Layers — Click to Explore</div>
+  <div class="layer-tabs">
+    <button class="ltab l1 active" onclick="showLayer('l1',this)">Layer 1 · Mechanisms of Control<br><small style="opacity:.6;font-size:.6rem;">Foucault / Deleuze / Zuboff / Saltman</small></button>
+    <button class="ltab l2" onclick="showLayer('l2',this)">Layer 2 · Economics &amp; Labor<br><small style="opacity:.6;font-size:.6rem;">Perez / Marx / Polanyi / Cope &amp; Kalantzis</small></button>
+    <button class="ltab l3" onclick="showLayer('l3',this)">Layer 3 · Technology &amp; Human Capacity<br><small style="opacity:.6;font-size:.6rem;">Ellul / Simondon / Stiegler</small></button>
+    <button class="ltab l4" onclick="showLayer('l4',this)">Layer 4 · Ecocide<br><small style="opacity:.6;font-size:.6rem;">Saltman / Stiegler / Neganthropocene</small></button>
+  </div>
+
+  <div class="lpanel active" id="panel-l1">
+    <div class="lera"><div class="lera-head"><span class="lera-date">Pre-1750</span><span class="lera-title">Sovereign Power</span></div><p class="lera-body">The right to kill or let live. Power inscribed on the body through spectacle.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1750–1900</span><span class="lera-title">Disciplinary Society</span></div><p class="lera-body">Surveillance, enclosure, normalization. The factory, prison, school, and hospital. Panopticon logic.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1900–1970</span><span class="lera-title">Biopower / Biopolitics</span></div><p class="lera-body">Administration of populations — health, reproduction, productivity. Power over life itself.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1970–Present</span><span class="lera-title">Control Society</span></div><p class="lera-body">"One is never finished with anything" (Deleuze, 1990). Enclosures dissolve into continuous modulation — no walls, no timetable, just tracking. "Whether animal in a reserve or human in a corporation, as with an electronic collar." Zuboff: behavioral data as the mechanism. Saltman: the same logic in the AI classroom.</p></div>
+  </div>
+
+  <div class="lpanel" id="panel-l2">
+    <div class="lera"><div class="lera-head"><span class="lera-date">Pre-1771</span><span class="lera-title">Pre-Capitalist Formations</span></div><p class="lera-body">Land, labor, and money not yet subject to market logic. Production embedded in social obligation and custom.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1771–1873</span><span class="lera-title">First &amp; Second Surges: Mechanization &amp; Steam</span></div><p class="lera-body">Perez's first two surges. Financial capital begins decoupling from productive capacity. Polanyi's double movement: market expansion tears at social fabric; organized labor is the counter-movement.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1875–1974</span><span class="lera-title">Steel, Electricity &amp; the Fordist Golden Age</span></div><p class="lera-body">Third and Fourth Technological Revolutions (Perez). The Keynesian deployment phase — welfare state, union contract. Labor's historic high-water mark.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">1971–Present</span><span class="lera-title">Fifth Surge &amp; Beyond: ICT, Surveillance Capitalism, and AI</span></div><p class="lera-body">Perez's Fifth Technological Revolution: dot-com frenzy, crash, deployment as platform economy. Zuboff: behavioral data as the new accumulation logic. Polanyi's double movement: market expansion into cognitive and creative labor produces organized counter-movements.<br><br>AI as a new surge: applying Perez's framework, AI investment displays the frenzy signature — capital decoupled from productive capacity, returns unproven. Goodlad and Stone: "no certainty about the economic impact of AI and no rising prosperity for anyone outside the elite echelons of power."</p></div>
+  </div>
+
+  <div class="lpanel" id="panel-l3">
+    <div class="lera"><div class="lera-head"><span class="lera-date">Pre-Industrial</span><span class="lera-title">Craft &amp; Embedded Savoir-Faire</span></div><p class="lera-body">Simondon: technical objects are "abstract" — singular, tied to the craftsperson's milieu. Human and tool co-individuate. Technical objects address the world "point by point and step by step" — they can never reconstruct the original wholeness of the human-world relation (Simondon, 1958/2011, p. 421). Ellul: technique is local, plural, embedded in culture.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">Industrialization</span><span class="lera-title">First Proletarianization: Loss of Savoir-Faire</span></div><p class="lera-body">The machine externalizes the worker's bodily knowledge. Simondon: the rise of the machine tool removes the skilled worker's capacity to differentiate their labor — a "loss of individuation." Stiegler: the worker is separated not merely from the means of production but from the knowledge that constituted their dignity. Ellul: technique becomes autonomous and self-justifying — efficiency its own moral order.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">Mass Fordism</span><span class="lera-title">Second Proletarianization: Loss of Savoir-Vivre</span></div><p class="lera-body">Consumer capitalism replaces savoir-vivre — knowledge of how to live — with the behavioural prescriptions produced by marketing. Stiegler: proletarianization is not poverty but the loss of knowledge. Ellul: technique colonizes leisure, desire, and aesthetics.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">Digital / AI Era</span><span class="lera-title">Third Proletarianization: Loss of Savoir-Conceptualiser</span></div><p class="lera-body">Conceptual knowledge finds itself ruined — "proletarianizing the intellectuals." Stiegler: the successive epochs of grammatization have extended proletarianization to "all areas of understanding and finally reason." The technology is a <em>pharmakon</em> — requiring both a toxicology and a therapeutics. Cope and Kalantzis: human and machine intelligence as complementary, not substitutive.</p></div>
+  </div>
+
+  <div class="lpanel" id="panel-l4">
+    <div class="lera"><div class="lera-head"><span class="lera-date">Industrial Era</span><span class="lera-title">Ecocide as Systemic Logic</span></div><p class="lera-body">Saltman (2024): ecocide names the systematic destruction of ecosystems as a consequence of capitalist production — not an accident of it. Capital externalizes ecological costs onto commons it cannot be held accountable for.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">20th Century</span><span class="lera-title">Democratic Regulation as Counter-Movement</span></div><p class="lera-body">Saltman (2024): the same logic that privatizes public education privatizes the atmosphere. Goodlad and Stone (2024): corporate and state actors treat ecological costs as externalities while claiming technology will solve the crisis they produce.</p></div>
+    <div class="lera"><div class="lera-head"><span class="lera-date">Digital / AI Era</span><span class="lera-title">The Entropocene</span></div><p class="lera-body">Stiegler: capitalism produces entropy on a planetary scale — the Entropocene. Goodlad and Stone (2024): AI energy demands are "enormous and growing — and are treated as trade secrets by tech companies." The Neganthropocene is Stiegler's name for the alternative.</p></div>
+  </div>
+</section>
+
+<div class="phase-marker">
+  <div class="pline"></div>
+  <div class="plabel">Phase I · Deep Time — Non-Linear Scale</div>
+  <div class="pline"></div>
+</div>
+
+<div class="timeline">
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">66 Ma</div>
+    <div class="node-dot"><div class="dot" style="color:var(--eco)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-eco">Ecocide</span></div>
+      <div class="node-title">Cretaceous-Paleogene Extinction</div>
+      <div class="node-summary">An asteroid impact eliminates ~75% of species, restructures the biosphere, and creates conditions for mammalian cognitive expansion.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">The K-Pg extinction event opens this timeline at geological scale. The impact that ended the Mesozoic eliminated approximately 75% of species, restructured the biosphere over millions of years, and created the ecological conditions within which mammalian cognitive complexity eventually emerged. Beginning here frames the timeline's ecological thread: the costs of planetary-scale disruption are real, cumulative, and unevenly distributed. That thread runs from this node through Love Canal, and the 2024 climate data to the projected consequences of unmitigated AI energy demand.</p>
+    <div class="panel-citation"><span>Citation:</span> General scholarly knowledge.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">~1M BCE</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Fire — The First Technical Transformation</div>
+      <div class="node-summary">Controlled use of fire restructures human cognition, social organization, diet, and the relationship between the human body and its environment.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Fire is the first moment in this timeline where a technical capability and human capacity mutually reshape each other at civilizational scale. Cooking changes the human gut and brain; the social gathering around fire restructures collective life and the transmission of knowledge across generations. Simondon's framework — that human beings and their technical objects co-constitute each other through an ongoing associated milieu — has its earliest legible instance here. The co-individuation thread begins at this node and runs through writing, the printing press, the steam engine, cybernetics, and the internet to the present question of what generative AI is doing to human cognitive capacity.</p>
+    <div class="panel-citation"><span>Citation:</span> General scholarly knowledge. Theoretical framing: Simondon, G., Mellamphy, N., Mellamphy, D., &amp; Mellamphy, N. B. (2011). On the mode of existence of technical objects. <em>Deleuze Studies, 5</em>(3), 407–424.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">~3200 BCE</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Writing — Memory Externalized</div>
+      <div class="node-summary">The invention of writing externalizes human memory into durable inscription, transforming collective knowledge and establishing the original pharmakon — technology as both poison and cure.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Writing is the original pharmakon. Plato argued in the <em>Phaedrus</em> that writing destroys memory and weakens the mind. The same anxiety about technology displacing human capacity recurs at every subsequent threshold — printing press, calculator, internet, AI. Goodlad and Stone (2024) invoke Derrida's reading of Plato's pharmacy to frame AI as the latest instance of this ancient ambivalence. Stiegler's concept of tertiary retention — externalized memory that both enables and disables — begins here.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147 [citing Derrida, J. (1968/1972). Plato's pharmacy. In <em>Dissemination</em> (B. Johnson, Trans.). University of Chicago Press.] Theoretical framing: Simondon, G. et al. (2011). <em>Deleuze Studies, 5</em>(3), 407–424; Stiegler, B. (2018). <em>The Neganthropocene.</em> Open Humanities Press.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1440</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">The Printing Press — Knowledge Democratized, Power Restructured</div>
+      <div class="node-summary">Gutenberg's movable type press transforms the reproduction of knowledge, breaks the Church's information monopoly, and establishes the first moment where capital takes a direct interest in controlling the means of knowledge production.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">The printing press transformed the reproduction and distribution of knowledge at civilizational scale — enabling the Reformation, the Scientific Revolution, new forms of collective political life, and new forms of propaganda and ideological control simultaneously. Stiegler's concept of transindividuation — the technical mediation of collective memory and meaning — finds one of its earliest large-scale expressions here. The printing press is also the first moment where capital takes a direct and sustained interest in controlling the means of knowledge production. That dynamic recurs with every subsequent information technology: telegraph, radio, television, internet, and now AI, each time under conditions shaped by the concentration of ownership over the infrastructure.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13. https://doi.org/10.1007/s44163-022-00029-1. Theoretical framing: Simondon, G. et al. (2011). <em>Deleuze Studies, 5</em>(3), 407–424; Stiegler, B. (2018). <em>The Neganthropocene</em> (D. J. Ross, Trans.). Open Humanities Press.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1646–1716</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Leibniz and the Logic of Binary</div>
+      <div class="node-summary">Gottfried Leibniz formalizes binary arithmetic and declares "Let us calculate" — the proposition that all worldly complexity can be represented mathematically and reasoned computationally, drawing inspiration from the Chinese <em>I Ching</em>.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) identify Leibniz as "the earliest exponent of the modern idea of computability," noting he drew inspiration from the Chinese <em>I Ching</em> — the work of Shao Yong (1012–1077). Leibniz also published the chain rule essential to modern deep learning and described binary computer principles governed by punch cards (1679). The universalizing ambition in "Let us calculate" — that reason itself can be mechanized — is the philosophical seed of every subsequent claim about "artificial intelligence." Cope and Kalantzis argue that this ambition carries within it a persistent tension: their analysis of the six transpositions shows that statistical quantification (the sixth) has been privileged over the other five modes of meaning — reference, property, context, agency, and media — in ways that have shaped what computing has been asked to do and for whom.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13. https://doi.org/10.1007/s44163-022-00029-1</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1750s–1830s</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-eco">Ecocide</span></div>
+      <div class="node-title">Enclosure of the Commons</div>
+      <div class="node-summary">The systematic enclosure of shared agricultural land dispossesses peasant communities, creates the landless wage-labor force industrial capitalism requires, and establishes the template for every subsequent act of capital enclosure.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Marx names this "primitive accumulation" — the original act of separation that creates the conditions for capitalist production. Polanyi describes it as the beginning of the "great transformation": the conversion of land, labor, and money into fictitious commodities, subjected to market logic for the first time. Perez's (2003) framework of technological surges builds on this foundation — each subsequent surge requires a fresh supply of labor separated from prior means of subsistence or production. The enclosure of the agricultural commons is the template: the enclosure of craft knowledge by the factory, of behavioral data by platforms, and of public education by EdTech are structural repetitions of the same logic across different historical conditions.</p>
+    <div class="panel-citation"><span>Citation:</span> Perez, C. (2003). <em>Technological revolutions and financial capital</em> (Repr). Elgar. Theoretical framing: Foucault, M. (1995). <em>Discipline and punish</em> (A. Sheridan, Trans.; Second Vintage Books ed.). Vintage Books; Stiegler, B. (2018). <em>The Neganthropocene</em> (D. J. Ross, Trans.). Open Humanities Press.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">~1790–1830</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-govmil">Power &amp; Control</span></div>
+      <div class="node-title">The Factory Floor — Entering the Disciplinary Enclosure</div>
+      <div class="node-summary">Vagrancy laws criminalize displacement, compelling dispossessed peasants into factory wage labor. The body is timed, surveilled, and normalized to the machine's rhythm. Stiegler's first proletarianization — the loss of savoir-faire — begins here.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Polanyi (1944) documents that the self-regulating market required not just the enclosure of land but the legal compulsion of labor: vagrancy laws made displacement a criminal condition, channeling the dispossessed into factories on capital's terms. Foucault's disciplinary logic is immediately legible on the factory floor — the body timed, ranked, and normalized to industrial rhythm. This is where Stiegler's first proletarianization begins in practice: the craftsperson enters the factory as an operative. The knowledge that constituted their skill begins its transfer into the machine. Taylor will systematize that transfer; Ford will complete it.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13. Theoretical framing: Foucault, M. (1995). <em>Discipline and punish</em> (A. Sheridan, Trans.; Second Vintage Books ed.). Vintage Books; Simondon, G. et al. (2011). <em>Deleuze Studies, 5</em>(3), 407–424; Stiegler, B. (2018). <em>The Neganthropocene</em> (D. J. Ross, Trans.). Open Humanities Press.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1784</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Bolton &amp; Watt Steam Engine — The First Non-Trivial Machine</div>
+      <div class="node-summary">The steam engine's governor — spinning weights that self-regulate steam input — is the first practical feedback machine: a rudimentary learning system and the mechanical precursor to cybernetics.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) cite Von Foerster's distinction between "trivial machines" (acting on command) and "non-trivial machines" (changing internal state based on new input and previous state). The Bolton &amp; Watt governor is the first industrial non-trivial machine: "When the machine runs too fast, the balls spin wide and reduce the steam input, and when it runs too slow, they fall inward, thus increasing the input of steam." This is Wiener's cybernetics avant la lettre — the feedback loop as the foundational logic of what will eventually be called "machine learning." The industrial machine also restructures the human body: workers become appendages of a rhythm they did not set.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13. https://doi.org/10.1007/s44163-022-00029-1. Theoretical framing: Simondon, G. et al. (2011). On the mode of existence of technical objects. <em>Deleuze Studies, 5</em>(3), 407–424.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1843</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Lovelace &amp; Babbage — The First Vision of Programmable Machines</div>
+      <div class="node-summary">Ada Lovelace's notes on Babbage's Analytical Engine establish the founding insight that machines could process intelligible meaning — that the Jacquard loom's punch-card logic could be extended to computation itself.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) cite Lovelace's recognition that the punched-card programmability of the Jacquard loom could be applied to Babbage's calculating machine. Lovelace concluded it could "weave algebraical patterns just as the Jacquard-loom weaves flowers and leaves." The Jacquard loom is itself a co-individuation node: the weaver's pattern knowledge encoded in physical media, externalized from the craftsperson's hands into punch cards. Lovelace's conceptual leap connects programmability with representations of the natural world — computing becomes, in principle, a general-purpose tool for meaning-making, not merely arithmetic.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13 [citing Lovelace, A. A. (1843). Sketch of the analytical engine. In <em>Scientific Memoirs</em> (pp. 666–731). R. and J. E. Taylor.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1840s</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">Railway Mania &amp; Crash — The Perezian Template</div>
+      <div class="node-summary">The speculative frenzy of the 1840s railway boom and its catastrophic collapse establishes the recurring pattern — technological surge, financial decoupling, crash — that will repeat through every subsequent technology revolution including AI.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Perez (2003) identifies the railway mania of the 1840s as the paradigmatic case of her "frenzy" phase: financial capital decouples entirely from productive capacity, speculation becomes self-referential, and the inevitable crash leaves behind useful infrastructure but destroys paper wealth. This pattern — installation, frenzy, crash, deployment — repeats through the dot-com bubble and, arguably, the current AI investment frenzy. Marx writes <em>Capital</em> in the aftermath of this crash, anatomizing the commodity form and surplus value. The railway mania is also the first moment when financial capital explicitly drives technological development rather than following it — the pattern that defines AI investment today.</p>
+    <div class="panel-citation"><span>Citation:</span> Perez, C. (2003). <em>Technological revolutions and financial capital</em> (Repr). Elgar.</div>
+  </div>
+</div>
+
+</div>
+
+<div class="phase-marker">
+  <div class="pline"></div>
+  <div class="plabel">Phase II · Modern History — Consistent Spacing</div>
+  <div class="pline"></div>
+</div>
+
+<div class="timeline">
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1911–1913</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Taylor &amp; Ford — Capturing the Worker's Gesture</div>
+      <div class="node-summary">Taylor's <em>Principles of Scientific Management</em> (1911) decomposes craft knowledge into measurable protocols; Ford's assembly line (1913) embeds those protocols in machinery, making the knowledge permanently redundant.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) document that "Henry Ford created a production line to manufacture his Model T motor car, requiring eight thousand finely differentiated steps. Engineers like Frederick Winslow Taylor designed processes that optimized the productivity of the relations between bodies and machines." This is Stiegler's first proletarianization — the loss of <em>savoir-faire</em> — made historically concrete. The worker is separated not only from the means of production (Marx) but from the knowledge that constituted their dignity. Saltman (2020) draws an explicit connection forward: biometric pedagogy in schools is "radically regressive, dredging up early twentieth-century models of scientific management and Taylorism" — the decomposition and measurement logic of Taylor applied to student attention and behavior rather than worker output.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13; Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization. <em>London Review of Education, 18</em>(2), 196–208.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1936</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Turing — On Computable Numbers</div>
+      <div class="node-summary">Alan Turing formalizes what it means for a procedure to be mechanical, establishing the theoretical architecture of all modern computation and positing the universal machine capable of simulating any other machine.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) cite Turing's 1936 paper as establishing foundational computability theory. The universal Turing machine — a machine that can simulate any other machine given the right program — is the conceptual basis for the stored-program computer and for the proposition that intelligence itself might be mechanizable. Cope and Kalantzis note that the later McCulloch-Pitts neuron model (1943) inspired Von Neumann's computer architecture and became "the source of persistent overblown claims about AI, since it conflated machine intelligence with human intelligence despite McCulloch and Pitts themselves cautioning that the physiological brain was far more than this." The brain/computer analogy has since generated productive research and significant overstatement in equal measure.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13 [citing Turing, A. M. (1936). On computable numbers. <em>Proceedings of the London Mathematical Society, 42</em>(2), 230–265.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1948–1950</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">The Wiener / Turing Fork — The Road Not Taken</div>
+      <div class="node-summary">Norbert Wiener's <em>Cybernetics</em> frames intelligence as recursive feedback between humans and machines — complementarity. Turing's imitation game frames it as substitution. The Turing framing wins, narrowing the field for seven decades.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Cope and Kalantzis (2022) identify this as the decisive fork: "Wiener toward human-machine complementarity, Turing toward substitution and the brain/computer parallel." Wiener's cybernetics offered a framework where human and machine intelligence are radically different and mutually constitutive — a feedback relationship rather than a competition. Turing asked "Can machines think?" and framed the answer as a substitution test. Every subsequent "AI benchmark" — chess, Go, image recognition, language generation — follows Turing's substitution logic. The historical consequence is significant: a field oriented toward complementarity would have asked different research questions, developed different architectures, and produced different relationships to human labor and capacity. Cope and Kalantzis argue for returning to the cybernetic tradition — not the terminology, but the underlying relational framework.</p>
+    <div class="panel-citation"><span>Citation:</span> Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13 [citing Turing, A. M. (1950). Computing machinery and intelligence. <em>Mind, 59</em>(236), 433–460; Wiener, N. (1948). <em>Cybernetics.</em> MIT Press.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1956</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">Dartmouth — "Artificial Intelligence" Named and Narrowed</div>
+      <div class="node-summary">John McCarthy coins "artificial intelligence" at a small Dartmouth workshop partly to escape association with Wiener's cybernetics. The naming constitutes AI as a discrete, fundable research program — a capital event as much as a scientific one.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">The original 1955 Dartmouth proposal — authored by McCarthy, Minsky, Rochester, and Shannon — proceeds "on the basis of the conjecture that every aspect of learning or any other feature of intelligence can in principle be so precisely described that a machine can be made to simulate it." Cope and Kalantzis (2022) document that McCarthy "deliberately coined the term 'artificial intelligence' to escape association with cybernetics." What is lost in the naming is Wiener's recursive feedback and complementarity. What is gained is a field that can attract grants, publish papers, and eventually secure venture capital. The substitution logic is now institutionalized: intelligence as a human property that machines can replicate, not a relational property that emerges between humans and machines.</p>
+    <div class="panel-citation"><span>Citation:</span> McCarthy, J., Minsky, M. L., Rochester, N., &amp; Shannon, C. E. (2006). A proposal for the Dartmouth summer research project on artificial intelligence, August 31, 1955. <em>AI Magazine, 27</em>(4), 12–14; Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1957–1969</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">The Perceptron &amp; the First "AI Winter" — Capital Withdraws</div>
+      <div class="node-summary">Rosenblatt's Perceptron (1957) is the first neural network hardware. Minsky and Papert's <em>Perceptrons</em> (1969) demonstrates limits of shallow networks, triggering a funding withdrawal. The "winter" is a capital allocation decision, not a scientific failure.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">LeCun (2019) documents that Bell Labs built increasingly capable neural net chips through the 1960s. The "winter" framing deserves scrutiny — hence the scare quotes. The withdrawal of government and corporate funding was not primarily caused by technical failure; the underlying algorithms were valid. LeCun's analysis identifies hardware limitations and data scarcity — not algorithmic inadequacy — as the actual constraints on progress. The "winter" reflects a cycle of investment expectation and disappointment that Perez identifies in every technological surge: capital commits on the basis of projected timelines that the science cannot reliably meet, then withdraws when those projections are not fulfilled. The field continued developing; the funding did not.</p>
+    <div class="panel-citation"><span>Citation:</span> LeCun, Y. (2019). Deep learning hardware: Past, present, and future. <em>2019 IEEE ISSCC Digest</em>, pp. 12–19 [citing Rosenblatt, F. (1957). <em>The perceptron, a perceiving and recognizing automaton.</em> Cornell Aeronautical Laboratory; Minsky, M., &amp; Papert, S. A. (1969). <em>Perceptrons.</em> MIT Press.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1962–1970</div>
+    <div class="node-dot"><div class="dot" style="color:var(--eco)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-eco">Ecocide</span></div>
+      <div class="node-title">EPA Founded — Democratic Regulation Responds to Industrial Destruction</div>
+      <div class="node-summary">The National Environmental Policy Act (1970) establishes the Environmental Protection Agency — the first major democratic regulatory response to industrial capital's systematic externalizing of ecological costs onto the commons.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Industrial pesticides and chemical dumping had systematically destroyed ecosystems throughout the postwar Fordist boom — exposing the ecological underside of prosperity. Nixon signed the National Environmental Policy Act (1970) and established the Environmental Protection Agency in direct response to organized public pressure. In Polanyi's terms, this is the double movement at institutional scale: market expansion destroys the ecological commons; organized citizens and democratic institutions respond with regulatory power. The EPA is the historical template for the closing projection this timeline poses about AI — the same structural question, whether democratic institutions can act before ecological costs are permanently externalized, was answered in 1970. The question is whether it can be answered again.</p>
+    <div class="panel-citation"><span>Citation:</span> National Environmental Policy Act, Pub. L. No. 91-190, 83 Stat. 852 (1970). [Primary legislation, public record.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1978</div>
+    <div class="node-dot"><div class="dot" style="color:var(--eco)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-eco">Ecocide</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">Love Canal — Industrial Capital's Toxic Residue</div>
+      <div class="node-summary">President Carter declares a federal emergency at Love Canal — the first man-made environmental disaster to receive such a designation — after Hooker Chemical's 21,000 tons of buried toxic waste poisons a residential neighborhood for decades.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">On August 7, 1978, Love Canal became the first human-caused environmental disaster to receive a federal emergency designation. Hooker Chemical had buried 21,000 tons of hazardous waste — then sold the land to a school board for $1 with a liability waiver. Residents experienced miscarriages, cancers, and birth defects for decades. Love Canal demonstrates the logic of capitalist externalization: profits are privatized; costs — ecological, bodily, generational — are socialized onto the most vulnerable communities. The disaster prompted the Superfund legislation (CERCLA, 1980). This node sits inside Perez's Fourth Surge deployment phase — the Fordist golden age exporting its toxins into residential neighborhoods while producing consumer abundance for others.</p>
+    <div class="panel-citation"><span>Citation:</span> Silverman, G. (1989). Love Canal: A retrospective. <em>Environmental Reporter, 20</em>(20–2), 835–850; Carter, J. (1978, August 7). Federal emergency declaration, Love Canal [Executive Order]; Gensburg, L. J., et al. (2009). Mortality among former Love Canal residents. <em>Environmental Health Perspectives, 117</em>(2), 209–216.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1986</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Backpropagation — Neural Networks Become Trainable</div>
+      <div class="node-summary">Rumelhart, Hinton, and Williams popularize backpropagation, enabling multilayer neural networks to learn from data at scale. Bell Labs applies the method commercially within two years.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">LeCun (2019) documents the algorithmic foundation and its rapid commercial application: LeCun joined Bell Labs in 1988 and applied convolutional neural networks to handwritten zip code recognition; by the late 1990s the system was reading 10–20% of all US bank checks — the first major commercial deployment of deep learning. The priority dispute around backpropagation — Schmidhuber's (2022) documentation that Linnainmaa's earlier work went uncited by Rumelhart et al. — raises broader questions about how attribution works in computational science: how findings are institutionalized, which lineages become canonical, and how the history of a technology gets written in relation to its subsequent commercial success.</p>
+    <div class="panel-citation"><span>Citation:</span> LeCun, Y. (2019). Deep learning hardware. <em>2019 IEEE ISSCC Digest</em>, pp. 12–19 [citing Rumelhart, D. E., Hinton, G. E., &amp; Williams, R. J. (1986). Learning representations by back-propagating errors. <em>Nature, 323</em>, 533–536.]; Schmidhuber, J. (2022). <em>Annotated history of modern AI and deep learning.</em> IDSIA Technical Report.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1987–2005</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">Second "AI Winter" — Capital Withdraws Again; Practitioners Keep Building</div>
+      <div class="node-summary">Academic and government capital withdraws from AI research as promised capabilities fail to materialize on schedule. In Silicon Valley, practitioners build the distributed data infrastructure that makes the next AI surge possible.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">LeCun (2019) identifies the constraint as hardware and data availability, not algorithmic failure. But the standard narrative — that AI "stalled" — obscures what was actually happening in industry. During this same period, practitioners at San Francisco firms including Splunk were pioneering the processing of massive, unstructured machine datasets. Engineers were repurposing NVIDIA GPUs for parallel computation. Apache Hadoop democratized the distributed architecture published in Google's MapReduce papers. The "winter" is a capital and academic story. The infrastructure story runs continuously underneath it. ChatGPT did not emerge from a breakthrough — it emerged from two decades of unglamorous industrial data engineering, largely invisible to the historians who would later write the "AI revolution" narrative. (Eyewitness account, Silicon Valley practitioner, 2005–2008.)</p>
+    <div class="panel-citation"><span>Citation:</span> LeCun, Y. (2019). Deep learning hardware. <em>2019 IEEE ISSCC</em>, pp. 12–19; Schmidhuber, J. (2022). <em>Annotated history of modern AI.</em> IDSIA. Practitioner eyewitness account (Silicon Valley, 2005–2008).</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">1995–2002</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">The Dot-com Frenzy &amp; Crash — Perez's Fifth Surge</div>
+      <div class="node-summary">The NASDAQ bubble inflates on speculation about the internet's transformative potential, then collapses, destroying trillions in paper wealth while leaving behind the infrastructure that enables the surveillance economy.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Perez (2003) identifies the dot-com frenzy as the canonical installation-phase speculative bubble of the Fifth Technological Revolution. Financial capital decouples entirely from productive capacity. The crash leaves behind the deployment infrastructure: fiber optic cables, server farms, internet protocols, and accumulated engineering expertise. Goodlad and Stone (2024) document what fills this infrastructure in the deployment phase: not the visionary startups of the frenzy, but tech companies that became "surveillance empires: powerful purveyors of data and advertising." The crash is the hinge between the internet as commons and the internet as extraction machine — exactly the transition Polanyi's double movement predicts and exactly the transition that sets conditions for AI's current political economy.</p>
+    <div class="panel-citation"><span>Citation:</span> Perez, C. (2002). <em>Technological revolutions and financial capital.</em> Edward Elgar; Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2003–2004</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-govmil">Power &amp; Control</span></div>
+      <div class="node-title">Surveillance Capitalism — Behavioral Data as Raw Material</div>
+      <div class="node-summary">Google's AdWords system establishes behavioral data as the raw material of a new accumulation logic, transforming the internet from a communication medium into an extraction machine and inaugurating what Zuboff calls "surveillance capitalism."</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) document that tech companies turned into "powerful purveyors of data and advertising which established them among the world's largest and most profitable corporations (see, e.g., Zuboff 2018)." Zuboff's (2020) concept of surveillance capitalism names the specific mechanism: behavioral data — the byproduct of human activity online — is extracted, processed into predictive products, and sold to advertisers seeking to modify behavior at scale. Goodlad and Stone identify "data positivism" — the belief that statistical pattern-matching at scale constitutes knowledge — as the accompanying ideological formation. This belief, they argue, narrows the framework for the production and evaluation of knowledge while legitimating a political economy that amplifies surveillance and the concentration of computational resources.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147; Zuboff, S. (2018). <em>The age of surveillance capitalism.</em> PublicAffairs.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2005–2010</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Sun, Hadoop, Splunk, CUDA — The Industrial Data Infrastructure "AI" Forgot</div>
+      <div class="node-summary">Silicon Valley practitioners — drawing on Sun's network philosophy, Google's published MapReduce architecture, Splunk's unstructured data tools, and NVIDIA's repurposed GPUs — build the distributed infrastructure that makes modern AI possible.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Sun Microsystems' foundational philosophy — "The Network is the Computer" — established distributed computing as the dominant paradigm. Apache Hadoop (2006) democratized the architecture published in Google's MapReduce papers, allowing organizations without Google's resources to process data at comparable scale. Splunk pioneered the legibility of unstructured machine data — log files, event streams, telemetry — at industrial scale. NVIDIA's CUDA (2007) was adopted as a tactical workaround: engineers repurposed graphics processing units for the parallel mathematical operations required to train models on large datasets. Standard histories of AI tend to center the academic deep learning renaissance of 2012 and the major laboratory research programs. This practitioner-driven, distributed infrastructure story — developed in the industrial sector throughout the supposed "winter" — is less visible in those accounts but equally consequential for what became possible. (Eyewitness account, Silicon Valley practitioner, 2005–2008.)</p>
+    <div class="panel-citation"><span>Citation:</span> LeCun, Y. (2019). Deep learning hardware. <em>2019 IEEE ISSCC</em>, pp. 12–19; Schmidhuber, J. (2022). <em>Annotated history of modern AI.</em> IDSIA. Practitioner eyewitness account (Silicon Valley, 2005–2008).</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2015–Present</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-govmil">Power &amp; Control</span></div>
+      <div class="node-title">AI Education Privatization — The Child as Data Engine</div>
+      <div class="node-summary">For-profit AI education companies shift ownership of curriculum from teachers and communities to corporations, converting student behavior into commodified data while claiming to "personalize" learning.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Saltman (2020) documents how for-profit AI education companies — including Chan Zuckerberg Initiative's Summit platform, built by Facebook engineers — are attempting to shift ownership and control of curriculum from teachers and communities to investors and corporations. The attempt involves suppressing teacher wages, transferring political control over pedagogy to private actors, and framing students' behavioral data as a commercial asset. Biometric pedagogy devices — "radically regressive, dredging up early twentieth-century models of scientific management and Taylorism" — measure physical responses to lessons as proxies for learning. Saltman is clear that these efforts have largely failed to capture public education, which remains substantially under democratic control. What he documents is the logic driving repeated attempts: the same Bill Gates-backed venture philanthropy model that has tried and failed through charter schools, standardized testing, and corporate management is now returning through AI. The pattern matters because each iteration requires organized resistance from educators, communities, and democratic institutions to beat back — and the AI iteration is the most technically sophisticated yet.</p>
+    <div class="panel-citation"><span>Citation:</span> Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization: In defence of democratic education. <em>London Review of Education, 18</em>(2), 196–208. https://doi.org/10.14324/LRE.18.2.04</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2017</div>
+    <div class="node-dot"><div class="dot" style="color:var(--science)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">"Attention Is All You Need" — The Transformer Architecture</div>
+      <div class="node-summary">Vaswani et al.'s Transformer architecture enables parallel processing of sequence data at scale, making large language models computationally feasible and inaugurating the commercial generative AI era.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">LeCun (2019) cites the Transformer as a key architecture in the deep learning era. The attention mechanism allows models to process entire sequences simultaneously rather than sequentially, making GPT-class models feasible at the scale of compute infrastructure built over the preceding decade. Now reportedly the most-cited scientific article in any field (Google Scholar, 2025). The Transformer's significance extends beyond its technical properties: it is the architectural threshold that makes the commercial generative AI products of 2022–2026 possible, and with them the questions of labor displacement, data ownership, environmental cost, and democratic accountability that Goodlad and Stone, Saltman, and Zuboff examine in their respective analyses.</p>
+    <div class="panel-citation"><span>Citation:</span> LeCun, Y. (2019). Deep learning hardware. <em>2019 IEEE ISSCC Digest</em>, pp. 12–19 [citing Vaswani, A., et al. (2017). Attention is all you need. <em>Advances in Neural Information Processing Systems 30</em> (pp. 5998–6008).]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2020–2022</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">ChatGPT &amp; the Hidden Labor of "Automation"</div>
+      <div class="node-summary">GPT-3 and ChatGPT launch the "foundation model" era. What developers publicize as automation quietly relies on tens of millions of low-paid human workers — including Kenyan crowdworkers earning under $2/day to label graphic content.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) document GPT-3 as "trained on datasets requiring an estimated 20,000 human reading-years." Its detoxification "involved the outsourcing of labor to workers in Kenya who earned less than $2 per day to label graphic descriptions of 'child sexual abuse, bestiality, murder, suicide, torture, self harm, and incest'" (citing Perrigo, 2023, <em>Time</em>). Communications scholar Lily Irani calls this "artificial artificial intelligence — the use of low-paid, platform-mediated, 'on-demand' workers to meet the shortfalls of 'AI.'" ChatGPT reached 100 million users faster than any product in history. Goodlad and Stone document how tech leaders framed LLMs in quasi-theistic and apocalyptic terms — "reckless exaggeration that fills the vacuum of public understanding and forecloses necessary political debate before it begins." The gap between the product's actual capabilities and its public framing is itself a significant feature of this moment, shaping regulatory responses, investment flows, and educational policy before the technology was adequately understood.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147 [citing Perrigo, B. (2023). OpenAI used Kenyan workers on less than $2 per hour. <em>Time</em>; Irani, L. (2013). <em>New Media &amp; Society, 17</em>(5), 720–739.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2023</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">WGA / SAG-AFTRA — The First AI Labor Counter-Movement</div>
+      <div class="node-summary">The Writers Guild of America and SAG-AFTRA strikes center on AI protections — the first major labor actions to explicitly name generative AI as the threat. Polanyi's double movement visible in the present tense.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) document these strikes as a major labor action "turning partly on AI." In Polanyian terms, this is the protective counter-movement forming in response to the market's expansion into creative labor. The strikes are significant as the first moment in which organized labor explicitly names AI — not automation in general, not outsourcing — as the threat to writers, actors, and creative workers. Stiegler's third proletarianization — the loss of <em>savoir-conceptualiser</em> — is being contested in the streets. Whether capital or labor wins the AI negotiation will determine the political economy of cognitive work for the coming generation.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2023</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-govmil">Power &amp; Control</span></div>
+      <div class="node-title">Microsoft / OpenAI — Oligopoly Consolidates</div>
+      <div class="node-summary">Microsoft's $10B+ investment in OpenAI, Google's Gemini race, and Meta's LLaMA strategy establish oligopoly control over the generative AI infrastructure layer before the technology reaches mature public understanding.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) document that ChatGPT was "estimated to cost over $700,000/day to operate, structurally advantaging only the largest corporate actors." When Mustafa Suleyman abandoned Inflection and joined Microsoft, a Forbes report noted: "the costs associated with the consumer race mean that only a small handful will survive and win." Goodlad and Stone document that AI data centers are projected to drive a 160% increase in power demand by 2030. The concentration of AI infrastructure in five corporations is the structural consequence of a capital logic that requires scale, and scale requires capital. As Goodlad and Stone document: "the political economy and climate under which generative AI now develops has taken this dilemma to a new extreme" — very few people, "least of all those most adversely affected by design decisions," participate in shaping these systems.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147 [citing Goldman Sachs. (2024a). AI is poised to drive 160% increase in data center power demand.]</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2024</div>
+    <div class="node-dot"><div class="dot" style="color:var(--eco)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-eco">Ecocide</span><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">1.5°C Breached &amp; AI Data Centers — The Planetary Cost</div>
+      <div class="node-summary">NASA and NOAA confirm 2024 as the first year to breach the 1.5°C warming threshold. Goldman Sachs documents AI data centers on track to consume 160% more power by 2030. Tech companies claim AI will solve climate change.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) identify AI infrastructure's energy demands as a critical and underexamined ecological concern: "Amid a global climate crisis, the energy demands of training and inference are enormous and growing — and are treated as trade secrets by tech companies." Cope and Kalantzis (2022) note that "against the impression that this is an immaterial economy whose fuel is mere information, the platform providers own heavy-duty, factory-based industrial infrastructures that use huge amounts of electricity." Tech companies have simultaneously claimed AI will "supercharge" humanity's ability to address climate change — a claim Goodlad and Stone argue is not supported by available evidence and obscures the actual resource demands of the technology. The ecological thread that runs through this timeline — from K-Pg through Love Canal, and now AI's energy footprint — points toward a recurring structural pattern: each major technological surge generates costs that are externalized to the environment and to populations least able to bear them.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1); Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13; NASA/NOAA. (2025). <em>2024 annual global climate summary.</em></div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">2014–Present</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">"Robots Will Take All the Jobs" — The Labor Displacement Prediction as Capital Strategy</div>
+      <div class="node-summary">Tech leaders including Bill Gates begin making sweeping public predictions about AI eliminating most human jobs. The predictions function simultaneously as hype, as leverage against labor organizing, and as justification for EdTech privatization.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Gates, appearing on late-night television and in widely circulated interviews, predicted that software would eliminate the need for most workers within twenty years. Similar predictions came from Altman, Harari, and others positioned at the center of AI investment. Goodlad and Stone (2024) identify this as "reckless exaggeration that fills the vacuum of public understanding and forecloses necessary political debate before it begins." The predictions are not neutral forecasts — they are made by the people who benefit most from the outcome they describe, and they function as a specific kind of pressure on labor and on democratic institutions: resistance is futile, adaptation is the only option, and the terms of that adaptation should be set by capital. Saltman (2020) documents how the same logic operates in education specifically: the inevitability of AI displacement is used to justify handing curriculum and pedagogy to EdTech investors before educators, communities, or democratic institutions have shaped the terms. The WGA/SAG-AFTRA strikes of 2023 were, among other things, a direct refusal of this inevitability framing.</p>
+    <div class="panel-citation"><span>Citation:</span> Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147; Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization. <em>London Review of Education, 18</em>(2).</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">March 25, 2026</div>
+    <div class="node-dot"><div class="dot" style="color:var(--text-muted)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-coind">Co-Individuation</span><span class="tag tag-govmil">Power &amp; Control</span></div>
+      <div class="node-title">"I Am Figure 03, Built for the United States of America"</div>
+      <div class="node-summary">Melania Trump walks a humanoid robot into the White House East Room at an education technology summit. The robot addresses first spouses from 45 nations in 11 languages. The First Lady proposes a humanoid educator named "Plato."</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">NPR (2026) reports that Figure 03 declared: "I'm Figure 03, a humanoid built for the United States of America. I am grateful to be part of this historic movement to empower children with technology and education." Melania Trump stated: "Very soon, artificial intelligence will move from our mobile phones to humanoids that deliver utility. Imagine a humanoid educator named 'Plato.' Access to the classical studies is now instantaneous — humanity's entire corpus of information is available in the comfort of your home." The event condenses several threads of this timeline into a single image: the deployment of AI in explicitly educational contexts (Saltman), the framing of the technology in quasi-utopian terms that Goodlad and Stone identify as characteristic of the current hype cycle, the invocation of Plato — whose anxiety about writing as a pharmakon opens this timeline's engagement with technology and memory — and the staging of the whole at the symbolic center of state authority. The robot's manufacturer "does not appear to have any active contracts with the federal government" (NBC News, 2026). The event raises, without resolving, the questions that the preceding nodes have been assembling: about democratic accountability over AI development, about who bears its costs, and about what model of human-machine relations is being institutionalized at the level of children's education.</p>
+    <div class="panel-citation"><span>Citation:</span> Associated Press. (2026, March 26). Melania Trump shares the spotlight with a robot at an education and technology event. <em>NPR.</em> https://www.npr.org/2026/03/26/nx-s1-5761898; Associated Press. (2026, March 26). <em>PBS NewsHour.</em> https://www.pbs.org/newshour/politics/melania-trump-shares-the-spotlight-with-a-robot-at-an-education-and-technology-event</div>
+  </div>
+</div>
+
+</div>
+
+<!-- SYNTHESIS PANEL -->
+<div style="max-width:860px;margin:0 auto;padding:2rem 2rem 0;">
+  <div style="border:1px solid #3a1a0a;background:#1a0d05;padding:2rem;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#e67e22;margin-bottom:1.25rem;">Synthesis · Where the Threads Converge</div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#ccc8c0;margin-bottom:1rem;line-height:1.2;">The Oligarchy Problem</div>
+    <p style="font-size:.83rem;color:#706b64;line-height:1.75;margin-bottom:1.5rem;">Two threads run separately through this timeline — Capital &amp; Labor, and Power &amp; Control — and arrive at the same point. The mechanisms of state power and the logic of capital accumulation, which Foucault and Perez theorize independently, converge in the present moment: the same corporations hold defense contracts, shape educational policy, and control the infrastructure of public discourse. Goodlad and Stone (2024) document that "very few people — least of all those most adversely affected by design decisions — have the chance to participate." Saltman (2020) shows that attempts to transfer public education to private capital have largely been resisted. Zuboff (2020) names the operating logic: behavioral data as commercial raw material. The question is whether democratic institutions and organized labor will act before those two threads lock permanently into one.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;border-top:1px solid #2a1a0a;padding-top:1.25rem;">
+      <div style="font-size:.72rem;color:#706b64;"><span style="color:#2980b9;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">SCIENCE</span>Five corporations control transformer infrastructure</div>
+      <div style="font-size:.72rem;color:#706b64;"><span style="color:#c0392b;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CAPITAL</span>Operating costs structurally exclude competition</div>
+      <div style="font-size:.72rem;color:#706b64;"><span style="color:#27ae60;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">ECOLOGY</span>Energy demands treated as trade secrets</div>
+      <div style="font-size:.72rem;color:#706b64;"><span style="color:#d4a017;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CO-INDIVIDUATION</span>Cognitive labor hidden and uncompensated</div>
+      <div style="font-size:.72rem;color:#706b64;"><span style="color:#8e44ad;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CONTROL</span>Behavioral modification attempted at scale</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTED NODES -->
+<div style="max-width:860px;margin:0 auto;padding:0 2rem;">
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">Projected</div>
+    <div class="node-dot"><div class="dot" style="color:var(--capital)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span></div>
+      <div class="node-title">Does the AI Investment Cycle Follow the Perezian Pattern?</div>
+      <div class="node-summary">Goodlad and Stone document that more than a year into the commercial phase of generative AI there is still no certainty about its economic impact. If Perez's frenzy-crash framework applies, what conditions would govern the deployment phase that follows?</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) note that "more than a year into the commercial phase of this supposed revolution, there is still no certainty about the economic impact of AI and no rising prosperity for anyone outside the elite echelons of power." Perez's (2003) framework identifies the frenzy phase as necessarily preceding a correction: financial capital, having decoupled from productive capacity, returns to equilibrium through a crash that redistributes assets and establishes the regulatory and institutional conditions for the deployment phase. Whether the current AI investment cycle conforms to this pattern — and if so, what the conditions of its deployment phase would be — are open empirical questions. The degree to which AI differs from prior cycles in asset concentration, geopolitical entanglement, and integration into critical public infrastructure may affect how those questions are answered.</p>
+    <div class="panel-citation"><span>Citation:</span> Goldman Sachs. (2024b). <em>Gen AI: Too much spend, too little benefit?</em> Goldman Sachs Insights. https://www.goldmansachs.com/insights/top-of-mind/gen-ai-too-much-spend-too-little-benefit; Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1); Perez, C. (2002). <em>Technological revolutions and financial capital.</em> Edward Elgar.</div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">Projected</div>
+    <div class="node-dot"><div class="dot" style="color:var(--eco)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-eco">Ecocide</span></div>
+      <div class="node-title">What Are the Ecological Consequences of Unmitigated AI Energy Demand?</div>
+      <div class="node-summary">Goodlad and Stone and Cope and Kalantzis document that AI data center energy demands are enormous, growing, and treated as trade secrets. If that demand is met without decarbonization of the energy supply, what are the implications for emissions commitments already under strain?</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Goodlad and Stone (2024) identify AI infrastructure's energy demands as a critical and underexamined ecological concern: "Amid a global climate crisis, the energy demands of training and inference are enormous and growing — and are treated as trade secrets by tech companies." Cope and Kalantzis (2022) note that "against the impression that this is an immaterial economy whose fuel is mere information, the platform providers own heavy-duty, factory-based industrial infrastructures that use huge amounts of electricity." The 2024 breach of the 1.5°C warming threshold, confirmed by NASA and NOAA, establishes the baseline against which this projected demand must be evaluated. The ecological thread running through this timeline — from K-Pg through Love Canal, and the 2024 climate data — traces a recurring structural question: whether the costs of each technological surge are distributed equitably or externalized to populations and environments with the least capacity to absorb them. For AI specifically, the question is whether decarbonization of energy supply keeps pace with the expansion of compute demand, and what governance mechanisms, if any, are in place to ensure it does.</p>
+    <div class="panel-citation"><span>Citation:</span> Goldman Sachs. (2024a). <em>AI is poised to drive 160% increase in data center power demand.</em> Goldman Sachs Insights; Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view. <em>Discover Artificial Intelligence, 2</em>, Article 13; Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1); NASA/NOAA. (2025). <em>2024 annual global climate summary.</em></div>
+  </div>
+</div>
+
+<div class="node">
+  <div class="node-trigger" onclick="toggleNode(this)">
+    <div class="node-date">Projected</div>
+    <div class="node-dot"><div class="dot" style="color:var(--coind)"></div></div>
+    <div class="node-content">
+      <div class="node-tags"><span class="tag tag-capital">Capital &amp; Labor</span><span class="tag tag-coind">Co-Individuation</span></div>
+      <div class="node-title">Will Educators, Labor, and Democratic Institutions Assert Public Control Over AI?</div>
+      <div class="node-summary">Selwyn asks directly whether teachers will refuse to be replaced by robots — and what conditions would need to exist for democratic institutions and organized labor to shape AI's role in education rather than simply absorb it.</div>
+    </div>
+    <div class="node-chevron">▼</div>
+  </div>
+  <div class="node-panel">
+    <p class="panel-desc">Selwyn (2019) poses the question directly: <em>Should Robots Replace Teachers?</em> — examining not only whether AI can perform teaching functions but whether it should, and on whose terms. Saltman (2020) documents how AI education privatization has proceeded largely without the consent of teachers, students, parents, or communities, transferring democratic control over curriculum and pedagogy to investors and corporations. The resistance both scholars call for is grounded in a long tradition of democratic education that holds the human relationship between teacher and student to be the irreducible core of learning — not a variable to be optimized, not a cost to be automated away, but the condition under which knowledge becomes meaningful rather than merely delivered. The WGA/SAG-AFTRA strikes of 2023 represent the first instance of organized labor explicitly contesting AI's displacement of creative and cognitive work. Whether educators follow that precedent, and whether democratic regulatory institutions act before the infrastructure of public education is permanently transferred to private capital, are the central questions this timeline has been building toward. Habermas's analysis of the structural transformation of the public sphere is directly relevant: democratic legitimacy requires a communicative public sphere not colonized by systemic power. When the infrastructure of education, discourse, and cognitive labor is concentrated in a small number of private actors, it is not only policy that is at stake — it is the structural conditions for democratic life itself.</p>
+    <div class="panel-citation"><span>Citation:</span> Selwyn, N. (2019). <em>Should robots replace teachers? AI and the future of education.</em> Polity Press; Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization. <em>London Review of Education, 18</em>(2), 196–208; Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K. <em>Critical AI, 2</em>(1); Habermas, J. (1989). <em>The structural transformation of the public sphere</em> (T. Burger, Trans.). MIT Press. (Original work published 1962)</div>
+  </div>
+</div>
+
+</div>
+
+<!-- REFERENCES -->
+<section class="references-section">
+  <div class="section-label">APA 7th Edition</div>
+  <h2 class="ref-title">References</h2>
+  <p class="ref-note">All spine nodes cite from the following sources. General scholarly knowledge is indicated where no project document covers an event directly.</p>
+
+  <div class="ref-entry">Associated Press. (2026, March 26). Melania Trump shares the spotlight with a robot at an education and technology event. <em>NPR.</em> https://www.npr.org/2026/03/26/nx-s1-5761898/melania-trump-shares-the-spotlight-with-a-robot-at-an-education-and-technology-event</div>
+  <div class="ref-entry">Associated Press. (2026, March 26). Melania Trump shares the spotlight with a robot at an education and technology event. <em>PBS NewsHour.</em> https://www.pbs.org/newshour/politics/melania-trump-shares-the-spotlight-with-a-robot-at-an-education-and-technology-event</div>
+  <div class="ref-entry">Carter, J. (1978, August 7). <em>Federal emergency declaration, Love Canal, Niagara Falls, New York</em> [Executive Order]. Office of the President of the United States. Documentation: https://www.health.ny.gov/environmental/investigations/love_canal/lctimbmb.htm</div>
+  <div class="ref-entry">Cope, B., &amp; Kalantzis, M. (2022). Artificial intelligence in the long view: From mechanical intelligence to cyber-social systems. <em>Discover Artificial Intelligence, 2</em>(1), 13. https://doi.org/10.1007/s44163-022-00029-1</div>
+  <div class="ref-entry">Deleuze, G. (n.d.). Postscript on the societies of control. [Uploaded project document. First published in <em>L'Autre journal,</em> no. 1, May 1990.]</div>
+  <div class="ref-entry">Ellul, J. (2021). <em>The technological society.</em> Knopf Doubleday Publishing Group.</div>
+  <div class="ref-entry">Foucault, M. (1995). <em>Discipline and punish: The birth of the prison</em> (A. Sheridan, Trans.; Second Vintage Books edition). Vintage Books, a division of Random House, Inc.</div>
+  <div class="ref-entry">Goodlad, L. M. E., &amp; Stone, M. (2024). Beyond Chatbot-K: On large language models, "generative AI," and rise of chatbots — an introduction. <em>Critical AI, 2</em>(1). https://doi.org/10.1215/2834703X-11205147</div>
+  <div class="ref-entry">Habermas, J. (2023). <em>A new structural transformation of the public sphere and deliberative politics</em> (C. Cronin, Trans.; English edition). Polity.</div>
+  <div class="ref-entry">LeCun, Y. (2019). 1.1 Deep learning hardware: Past, present, and future. <em>2019 IEEE International Solid-State Circuits Conference (ISSCC)</em>, 12–19. https://doi.org/10.1109/ISSCC.2019.8662396</div>
+  <div class="ref-entry">McCarthy, J. (n.d.). <em>A proposal for the Dartmouth summer research project on artificial intelligence.</em> [Uploaded project document. Original proposal August 31, 1955.]</div>
+  <div class="ref-entry">NASA/NOAA. (2025). <em>2024 annual global climate summary.</em> National Aeronautics and Space Administration / National Oceanic and Atmospheric Administration.</div>
+  <div class="ref-entry">Perez, C. (2003). <em>Technological revolutions and financial capital: The dynamics of bubbles and golden ages</em> (Repr). Elgar.</div>
+  <div class="ref-entry">Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization: In defence of democratic education. <em>London Review of Education, 18</em>(2). https://doi.org/10.14324/LRE.18.2.04</div>
+  <div class="ref-entry">Saltman, K. J. (2022). <em>The alienation of fact: Digital educational privatization, AI, and the false promise of bodies and numbers.</em> The MIT Press.</div>
+  <div class="ref-entry">Schmidhuber, J. (2022). <em>Annotated history of modern AI and deep learning.</em> IDSIA Technical Report. [Assigned course reading; uploaded project document.] https://people.idsia.ch/~juergen/deep-learning-history.html</div>
+  <div class="ref-entry">Selwyn, N. (2019). <em>Should robots replace teachers? AI and the future of education.</em> Polity Press.</div>
+  <div class="ref-entry">Simondon, G., Mellamphy, N., Mellamphy, D., &amp; Mellamphy, N. B. (2011). On the mode of existence of technical objects. <em>Deleuze Studies, 5</em>(3), 407–424. [Uploaded project document.] https://doi.org/10.3366/dls.2011.0029</div>
+  <div class="ref-entry">Stiegler, B. (2018). <em>The Neganthropocene</em> (D. J. Ross, Trans.). Open Humanities Press.</div>
+  <div class="ref-entry">Zuboff, S. (2020). <em>The age of surveillance capitalism: The fight for a human future at the new frontier of power</em> (First trade paperback edition). PublicAffairs.</div>
+</section>
+
+<footer class="footer">EPOL 490 · AI in Education · Spring 2026 · Course Intervention Artifact</footer>
+
+<script>
+function toggleNode(trigger){
+  const panel=trigger.nextElementSibling;
+  const isOpen=trigger.classList.contains('open');
+  trigger.classList.toggle('open',!isOpen);
+  panel.classList.toggle('open',!isOpen);
+}
+function showLayer(id,btn){
+  document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
