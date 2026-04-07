@@ -7,8 +7,8 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
 :root {
-  --bg:#080808;--surface:#101010;--surface2:#161616;--border:#242424;
-  --text:#e8e4dc;--text-dim:#a09890;--text-muted:#706b64;
+  --bg:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--border:#2e2e2e;
+  --text:#f0ece4;--text-dim:#c8c0b8;--text-muted:#9a9490;
   --red:#9b2335;--red-bright:#c0392b;--amber:#b8860b;--amber-bright:#d4a017;
   --green:#1e5c3a;--green-bright:#27ae60;--blue:#1a3a5c;--blue-bright:#2980b9;
   --purple:#3a1e5c;--purple-bright:#8e44ad;
@@ -25,7 +25,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--red-bright);margin-bottom:1.5rem;}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:.5rem;}
 .hero h1 span{color:var(--text-dim);font-style:italic;}
-.hero-sub{font-size:.95rem;color:var(--text-dim);max-width:580px;margin:1.5rem 0 2rem;line-height:1.75;}
+.hero-sub{font-size:.95rem;color:var(--text);max-width:580px;margin:1.5rem 0 2rem;line-height:1.75;}
 .thesis-block{border-left:2px solid var(--red-bright);padding:1rem 1.5rem;background:var(--surface);font-size:.85rem;color:var(--text-dim);font-style:italic;line-height:1.75;max-width:680px;}
 .legend-section{padding:2rem;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border);}
 .section-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;}
@@ -46,16 +46,21 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 .lera{padding:1rem 1.5rem;border-bottom:1px solid var(--border);}
 .lera:last-child{border-bottom:none;}
 .lera-head{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.4rem;}
-.lera-date{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-muted);}
+.lera-date{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-dim);}
 .lera-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--text);}
-.lera-body{font-size:.78rem;color:var(--text-dim);line-height:1.65;}
+.lera-body{font-size:.78rem;color:var(--text);line-height:1.65;}
 .phase-marker{max-width:860px;margin:0 auto;padding:1.5rem 2rem;display:flex;align-items:center;gap:1rem;}
 .pline{flex:1;height:1px;background:var(--border);}
 .plabel{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
 .timeline{max-width:860px;margin:0 auto;padding:0 2rem 4rem;position:relative;}
 .timeline::before{content:'';position:absolute;left:calc(2rem + 4.5rem);top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 5%,var(--border) 95%,transparent);}
 .node{position:relative;margin-bottom:.1rem;}
-.node-trigger{display:flex;align-items:flex-start;padding:.85rem 0;cursor:pointer;transition:background .15s;border-radius:2px;}
+.node-trigger:focus-visible{outline:2px solid var(--text-dim);outline-offset:2px;border-radius:2px;}
+.ltab:focus-visible{outline:2px solid var(--text-dim);outline-offset:-2px;}
+a:focus-visible{outline:2px solid var(--text-dim);outline-offset:2px;}
+.skip-link{position:absolute;top:-40px;left:0;background:var(--surface);color:var(--text);padding:.5rem 1rem;z-index:1000;font-size:.85rem;}
+.skip-link:focus{top:0;}
+
 .node-trigger:hover{background:rgba(255,255,255,.025);}
 .node-trigger.open{background:rgba(255,255,255,.03);}
 .node-date{width:4.5rem;flex-shrink:0;text-align:right;padding-right:1.25rem;font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--text-muted);line-height:1.4;padding-top:.1rem;}
@@ -76,13 +81,13 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 .node-trigger.open .node-chevron{transform:rotate(180deg);}
 .node-panel{display:none;margin-left:7rem;border-left:1px solid var(--border);padding:1.25rem 1.5rem;background:var(--surface);margin-bottom:.5rem;}
 .node-panel.open{display:block;}
-.panel-desc{font-size:.83rem;color:var(--text-dim);line-height:1.75;margin-bottom:1rem;}
-.panel-citation{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--text-muted);border-top:1px solid var(--border);padding-top:.75rem;line-height:1.6;}
-.panel-citation span{color:var(--text-dim);font-style:italic;}
+.panel-desc{font-size:.85rem;color:var(--text);line-height:1.8;margin-bottom:1rem;}
+.panel-citation{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--text-dim);border-top:1px solid var(--border);padding-top:.75rem;line-height:1.6;}
+.panel-citation span{color:var(--text);font-style:italic;}
 .references-section{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem;border-top:1px solid var(--border);}
 .ref-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
-.ref-note{font-size:.75rem;color:var(--text-muted);margin-bottom:2rem;font-style:italic;}
-.ref-entry{font-size:.77rem;color:var(--text-dim);line-height:1.7;padding:.6rem 0 .6rem 2rem;text-indent:-2rem;border-bottom:1px solid var(--border);}
+.ref-note{font-size:.75rem;color:var(--text-dim);margin-bottom:2rem;font-style:italic;}
+.ref-entry{font-size:.8rem;color:var(--text);line-height:1.75;padding:.6rem 0 .6rem 2rem;text-indent:-2rem;border-bottom:1px solid var(--border);}
 .footer{text-align:center;padding:2rem;font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text-muted);letter-spacing:.15em;border-top:1px solid var(--border);}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -91,6 +96,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 </style>
 </head>
 <body>
+<a href="#timeline" class="skip-link">Skip to timeline</a>
 
 <header class="header">
   <div class="header-title">A Critical History of Artificial Intelligence</div>
@@ -723,14 +729,14 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 <div style="max-width:860px;margin:0 auto;padding:2rem 2rem 0;">
   <div style="border:1px solid #3a1a0a;background:#1a0d05;padding:2rem;">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#e67e22;margin-bottom:1.25rem;">Synthesis · Where the Threads Converge</div>
-    <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#ccc8c0;margin-bottom:1rem;line-height:1.2;">The Oligarchy Problem</div>
-    <p style="font-size:.83rem;color:#706b64;line-height:1.75;margin-bottom:1.5rem;">Two threads run separately through this timeline — Capital &amp; Labor, and Power &amp; Control — and arrive at the same point. The mechanisms of state power and the logic of capital accumulation, which Foucault and Perez theorize independently, converge in the present moment: the same corporations hold defense contracts, shape educational policy, and control the infrastructure of public discourse. Goodlad and Stone (2024) document that "very few people — least of all those most adversely affected by design decisions — have the chance to participate." Saltman (2020) shows that attempts to transfer public education to private capital have largely been resisted. Zuboff (2020) names the operating logic: behavioral data as commercial raw material. The question is whether democratic institutions and organized labor will act before those two threads lock permanently into one.</p>
+    <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#f0ece4;margin-bottom:1rem;line-height:1.2;">The Oligarchy Problem</div>
+    <p style="font-size:.85rem;color:#d8d0c8;line-height:1.8;margin-bottom:1.5rem;">Two threads run separately through this timeline — Capital &amp; Labor, and Power &amp; Control — and arrive at the same point. The mechanisms of state power and the logic of capital accumulation, which Foucault and Perez theorize independently, converge in the present moment: the same corporations hold defense contracts, shape educational policy, and control the infrastructure of public discourse. Goodlad and Stone (2024) document that "very few people — least of all those most adversely affected by design decisions — have the chance to participate." Saltman (2020) shows that attempts to transfer public education to private capital have largely been resisted. Zuboff (2020) names the operating logic: behavioral data as commercial raw material. The question is whether democratic institutions and organized labor will act before those two threads lock permanently into one.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;border-top:1px solid #2a1a0a;padding-top:1.25rem;">
-      <div style="font-size:.72rem;color:#706b64;"><span style="color:#2980b9;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">SCIENCE</span>Five corporations control transformer infrastructure</div>
-      <div style="font-size:.72rem;color:#706b64;"><span style="color:#c0392b;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CAPITAL</span>Operating costs structurally exclude competition</div>
-      <div style="font-size:.72rem;color:#706b64;"><span style="color:#27ae60;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">ECOLOGY</span>Energy demands treated as trade secrets</div>
-      <div style="font-size:.72rem;color:#706b64;"><span style="color:#d4a017;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CO-INDIVIDUATION</span>Cognitive labor hidden and uncompensated</div>
-      <div style="font-size:.72rem;color:#706b64;"><span style="color:#8e44ad;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CONTROL</span>Behavioral modification attempted at scale</div>
+      <div style="font-size:.75rem;color:#c8c0b8;"><span style="color:#5dade2;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">SCIENCE</span>Five corporations control transformer infrastructure</div>
+      <div style="font-size:.75rem;color:#c8c0b8;"><span style="color:#e74c3c;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CAPITAL</span>Operating costs structurally exclude competition</div>
+      <div style="font-size:.75rem;color:#c8c0b8;"><span style="color:#2ecc71;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">ECOLOGY</span>Energy demands treated as trade secrets</div>
+      <div style="font-size:.75rem;color:#c8c0b8;"><span style="color:#f1c40f;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CO-INDIVIDUATION</span>Cognitive labor hidden and uncompensated</div>
+      <div style="font-size:.75rem;color:#c8c0b8;"><span style="color:#a569bd;font-family:'IBM Plex Mono',monospace;font-size:.6rem;display:block;margin-bottom:.25rem;">CONTROL</span>Behavioral modification attempted at scale</div>
     </div>
   </div>
 </div>
@@ -811,6 +817,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
   <div class="ref-entry">McCarthy, J. (n.d.). <em>A proposal for the Dartmouth summer research project on artificial intelligence.</em> [Uploaded project document. Original proposal August 31, 1955.]</div>
   <div class="ref-entry">NASA/NOAA. (2025). <em>2024 annual global climate summary.</em> National Aeronautics and Space Administration / National Oceanic and Atmospheric Administration.</div>
   <div class="ref-entry">Perez, C. (2003). <em>Technological revolutions and financial capital: The dynamics of bubbles and golden ages</em> (Repr). Elgar.</div>
+  <div class="ref-entry">Polanyi, K. (1944). <em>The great transformation: The political and economic origins of our time.</em> Farrar &amp; Rinehart.</div>
   <div class="ref-entry">Rickert, L. (2026, March 19). Seminole Nation of Oklahoma passes moratorium on data centers. <em>Native News Online.</em> https://nativenewsonline.net/sovereignty/seminole-nation-of-oklahoma-passes-moratorium-on-data-centers/</div>
   <div class="ref-entry">Saltman, K. J. (2020). Artificial intelligence and the technological turn of public education privatization: In defence of democratic education. <em>London Review of Education, 18</em>(2). https://doi.org/10.14324/LRE.18.2.04</div>
   <div class="ref-entry">Saltman, K. J. (2022). <em>The alienation of fact: Digital educational privatization, AI, and the false promise of bodies and numbers.</em> The MIT Press.</div>
